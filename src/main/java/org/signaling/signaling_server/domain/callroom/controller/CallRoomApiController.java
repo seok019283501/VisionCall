@@ -5,6 +5,9 @@ import org.signaling.signaling_server.common.api.Api;
 import org.signaling.signaling_server.common.type.success.CallRoomSuccessType;
 import org.signaling.signaling_server.domain.callroom.dto.response.CallRoomInfoListResponse;
 import org.signaling.signaling_server.domain.callroom.service.CallRoomService;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +31,23 @@ public class CallRoomApiController implements CallRoomApi {
     ) {
         CallRoomInfoListResponse callRoomInfoListResponse = callRoomService.searchRoom(search, authentication);
         return Api.success(CallRoomSuccessType.SEARCH_CALL_ROOM, callRoomInfoListResponse);
+    }
+
+    @MessageMapping("/offer")
+    @SendTo("/sub/offer")
+    public String handleOffer(String offer) {
+        return offer; // Offer 전달
+    }
+
+    @MessageMapping("/answer/{userId}")
+    @SendTo("/sub/answer/{userId}")
+    public String handleAnswer(@DestinationVariable String userId, String answer) {
+        return answer; // Answer 전달
+    }
+
+    @MessageMapping("/ice-candidate/{userId}")
+    @SendTo("/sub/ice-candidate/{userId}")
+    public String handleIceCandidate(@DestinationVariable String userId, String candidate) {
+        return candidate; // ICE Candidate 전달
     }
 }

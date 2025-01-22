@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.signaling.signaling_server.common.exception.ApiException;
 import org.signaling.signaling_server.common.type.error.ErrorTypeCode;
 import org.signaling.signaling_server.common.type.success.SuccessTypeCode;
+import org.springframework.http.HttpStatus;
 
 @JsonPropertyOrder({"result", "body"})
 // 공통 응답 class
@@ -25,6 +26,10 @@ public record Api<T>(Result result, @JsonInclude(JsonInclude.Include.NON_NULL) @
 
     public static <T> Api<T> fail(ErrorTypeCode errorType) {
         return new Api<>(new Result(errorType), null);
+    }
+
+    public static <T> Api<T> fail(ErrorTypeCode errorType, HttpStatus httpStatus) {
+        return new Api<>(new Result(httpStatus, errorType), null);
     }
 
     public static <T> Api<T> fail(ErrorTypeCode errorType, T body) {

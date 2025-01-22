@@ -173,6 +173,8 @@ public class AuthService {
 
         String code = getCode();
 
+        emailCodeRepository.deleteByEmail(emailRequest.email());
+
         EmailCode emailCode = AuthEntityMapper.toEmailCode(emailRequest.email(),code);
 
         //코드 redis 저장
