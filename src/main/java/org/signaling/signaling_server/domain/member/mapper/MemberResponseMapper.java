@@ -6,6 +6,7 @@ import org.signaling.signaling_server.entity.member.MemberEntity;
 public class MemberResponseMapper {
     public static MemberInfoResponse toMemberResponseMapper(MemberEntity memberEntity){
         return MemberInfoResponse.builder()
+                .memberId(memberEntity.getId())
                 .username(memberEntity.getUsername())
                 .name(memberEntity.getName())
                 .nickname(memberEntity.getNickname())

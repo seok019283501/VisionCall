@@ -33,21 +33,21 @@ public class CallRoomApiController implements CallRoomApi {
         return Api.success(CallRoomSuccessType.SEARCH_CALL_ROOM, callRoomInfoListResponse);
     }
 
-    @MessageMapping("/offer")
-    @SendTo("/sub/offer")
-    public String handleOffer(String offer) {
+    @MessageMapping("/offer/{roomNumber}")
+    @SendTo("/sub/offer/{roomNumber}")
+    public String handleOffer(@DestinationVariable String roomNumber, String offer) {
         return offer; // Offer 전달
     }
 
-    @MessageMapping("/answer/{userId}")
-    @SendTo("/sub/answer/{userId}")
-    public String handleAnswer(@DestinationVariable String userId, String answer) {
+    @MessageMapping("/answer/{roomNumber}")
+    @SendTo("/sub/answer/{roomNumber}")
+    public String handleAnswer(@DestinationVariable String roomNumber, String answer) {
         return answer; // Answer 전달
     }
 
-    @MessageMapping("/ice-candidate/{userId}")
-    @SendTo("/sub/ice-candidate/{userId}")
-    public String handleIceCandidate(@DestinationVariable String userId, String candidate) {
+    @MessageMapping("/ice-candidate/{roomNumber}")
+    @SendTo("/sub/ice-candidate/{roomNumber}")
+    public String handleIceCandidate(@DestinationVariable String roomNumber, String candidate) {
         return candidate; // ICE Candidate 전달
     }
 }

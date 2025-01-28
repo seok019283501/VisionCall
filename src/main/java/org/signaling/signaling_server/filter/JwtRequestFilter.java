@@ -58,12 +58,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         jwtToken = authorizationHeader.substring(7);
 
         jwtSub = jwtUtils.getSubject(jwtToken);
-        if(uri.contains("/api/auth/refresh-token") && !jwtSub.equals("refreshToken")){
+        if(uri.contains("/api/auth/reissue-token") && !jwtSub.equals("refreshToken")){
             throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);
         }
 
         // access token 블랙리스트 확인
-        if (jwtUtils.blackListAccessToken(jwtToken)) {
+        if(jwtUtils.blackListAccessToken(jwtToken) && jwtSub.equals("accessToken")) {
             throw new UnauthorizedException(AuthErrorType.HEADER_INVALID);
         }
 
