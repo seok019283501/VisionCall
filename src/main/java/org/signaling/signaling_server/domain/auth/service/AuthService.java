@@ -128,17 +128,6 @@ public class AuthService {
         RefreshToken refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(()->new UnauthorizedException(AuthErrorType.TOKEN_NOT_FOUND));
 
-        String accessToken = refreshTokenEntity.getAccessToken();
-
-        //access token 남은 시간 계산
-        Date date = jwtUtils.getExpirationDateFromToken(accessToken);
-        long ttl = (date.getTime() - System.currentTimeMillis()) / 1000;
-
-        AccessToken accessTokenEntity = TokenEntityMapper.toAccessToken(ttl,accessToken);
-
-        //기존 access token 블랙리스트
-        accessTokenRepository.save(accessTokenEntity);
-
         //access token 재발급
         String newAccessToken = jwtUtils.generateAccessToken(userDetails.getMemberEntity().getUsername(), userDetails.getId());
 
@@ -172,6 +161,8 @@ public class AuthService {
         }
 
         String code = getCode();
+
+        emailCodeRepository.deleteByEmail(emailRequest.email());
 
         EmailCode emailCode = AuthEntityMapper.toEmailCode(emailRequest.email(),code);
 

@@ -36,6 +36,10 @@ public class FriendService {
     public void addFriend(AddFriendRequest addFriendRequest, Authentication authentication) {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
 
+        /**TODO 1. email 친구 추가로 변경
+         * 2. 자기 자신 친구 추가 불가
+         * **/
+
         // 친구추가 요청 유무 확인
         if (friendRepository.existsByFromMemberIdAndToMemberIdAndStatus(
                 userDetails.getId(), addFriendRequest.toMemberId(), FriendStatus.REQUEST)) {

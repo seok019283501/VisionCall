@@ -10,6 +10,7 @@ import org.signaling.signaling_server.entity.callroommember.enums.CallRoomMember
 @Schema(description = "통화방 참여자 정보를 위한 요청")
 public record CallRoomMemberInfoResponse(
         @NotNull @Schema(description = "통화방 참여자 고유 아이디", example = "1") Long callRoomMemberId,
+        @NotNull @Schema(description = "통화방 참여자의 회원 고유 아이디", example = "1") Long memberId,
         @NotBlank @Schema(description = "통화방 참여자 닉네임", example = "홍길동") String nickname,
         @NotBlank @Schema(description = "통화방 참여자 역할", example = "MANAGER") CallRoomMemberRole role
 ) {

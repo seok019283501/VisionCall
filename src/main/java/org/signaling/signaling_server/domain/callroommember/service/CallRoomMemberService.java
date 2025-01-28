@@ -128,7 +128,7 @@ public class CallRoomMemberService {
             throw new NotFoundException(CallRoomMemberErrorType.NOT_FOUND);
         }
 
-        List<CallRoomMemberInfoDto> callRoomMemberInfoDtoList = callRoomMemberRepository.findByCallRoomId(callRoomId);
+        List<CallRoomMemberInfoDto> callRoomMemberInfoDtoList = callRoomMemberRepository.findByCallRoomIdAndMemberId(callRoomId,userDetail.getId());
 
         List<CallRoomMemberInfoResponse> callRoomMemberInfoResponseList = callRoomMemberInfoDtoList.stream().map(
                 CallRoomMemberResponseMapper::toCallRoomMemberInfoResponse

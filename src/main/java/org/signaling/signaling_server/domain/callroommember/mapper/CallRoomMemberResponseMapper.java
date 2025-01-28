@@ -22,6 +22,7 @@ public class CallRoomMemberResponseMapper {
     public static CallRoomMemberInfoResponse toCallRoomMemberInfoResponse(CallRoomMemberInfoDto callRoomMemberInfoDto){
         return CallRoomMemberInfoResponse.builder()
                 .callRoomMemberId(callRoomMemberInfoDto.id())
+                .memberId(callRoomMemberInfoDto.memberId())
                 .nickname(callRoomMemberInfoDto.nickname())
                 .role(callRoomMemberInfoDto.role())
                 .build();

@@ -1,6 +1,7 @@
 package org.signaling.signaling_server.domain.callroommember.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.signaling.signaling_server.domain.callroommember.dto.CallRoomMemberInfoDto;
@@ -68,5 +69,31 @@ public class CallRoomMemberRepositoryImpl implements CallRoomMemberRepository{
                         callRoomMemberEntity.callRoomId.eq(callRoomId) // 특정 call_room_id 조건
                 )
                 .fetch(); // 결과를 리스트로 반환;
+    }
+
+    @Override
+    public List<CallRoomMemberInfoDto> findByCallRoomIdAndMemberId(Long callRoomId, Long memberId) {
+        return jpaQueryFactory
+                .select(
+                        Projections.constructor(
+                                CallRoomMemberInfoDto.class,
+                                callRoomMemberEntity.id,     // call_room_member ID
+                                memberEntity.id,             // member ID
+                                memberEntity.nickname,       // 회원 닉네임
+                                callRoomMemberEntity.role    // 회원의 역할
+                        )
+                )
+                .from(callRoomMemberEntity)
+                .leftJoin(memberEntity)
+                .on(callRoomMemberEntity.memberId.eq(memberEntity.id)) // call_room_member와 member 테이블 조인
+                .where(callRoomMemberEntity.callRoomId.eq(callRoomId))  // 특정 call_room_id 조건
+                // memberId를 가진 row를 제일 먼저 오도록 정렬
+                .orderBy(
+                        new CaseBuilder()
+                                .when(callRoomMemberEntity.memberId.eq(memberId)).then(0)
+                                .otherwise(1)
+                                .asc()
+                )
+                .fetch(); // 결과를 리스트로 반환
     }
 }

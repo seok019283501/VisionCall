@@ -29,6 +29,7 @@ public class Result {
         this.description = errorTypeCode.getDescription();
     }
 
+
     public Result(HttpStatus httpStatus, ErrorTypeCode errorTypeCode) {
         this.code = httpStatus.value();
         this.message = errorTypeCode.getMessage();

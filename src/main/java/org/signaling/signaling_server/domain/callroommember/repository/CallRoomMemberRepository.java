@@ -24,4 +24,5 @@ public interface CallRoomMemberRepository {
     void deleteById(Long id);
 
     List<CallRoomMemberInfoDto> findByCallRoomId(Long callRoomId);
+    List<CallRoomMemberInfoDto> findByCallRoomIdAndMemberId(Long callRoomId, Long memberId);
 }

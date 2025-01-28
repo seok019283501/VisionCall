@@ -26,53 +26,53 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Api<?>> exception(final DataIntegrityViolationException exception) {
         log.error("{}", exception);
-        return new ResponseEntity<>(Api.fail(CommonErrorType.INVALID_BODY), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Api.fail(CommonErrorType.INVALID_BODY,HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UnexpectedTypeException.class)
     public ResponseEntity<Api<?>> exception(final UnexpectedTypeException exception) {
         log.error("{}", exception);
-        return new ResponseEntity<>(Api.fail(CommonErrorType.INVALID_TYPE), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Api.fail(CommonErrorType.INVALID_TYPE, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Api<?>> exception(final NullPointerException exception) {
         log.error("{}", exception);
         return new ResponseEntity<>(
-                Api.fail(CommonErrorType.NULL_POINT), HttpStatus.INTERNAL_SERVER_ERROR);
+                Api.fail(CommonErrorType.NULL_POINT, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Api<?>> exception(final NoSuchElementException exception) {
         log.error("{}", exception);
         return new ResponseEntity<>(
-                Api.fail(CommonErrorType.NO_SUCH_ELEMENT), HttpStatus.INTERNAL_SERVER_ERROR);
+                Api.fail(CommonErrorType.NO_SUCH_ELEMENT, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<Api<?>> exception(final IOException exception) {
         log.error("{}", exception);
-        return new ResponseEntity<>(Api.fail(CommonErrorType.IO), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Api.fail(CommonErrorType.IO, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Api<?>> exception(final IllegalArgumentException exception) {
         log.error("{}", exception);
         return new ResponseEntity<>(
-                Api.fail(CommonErrorType.ILLEGAL_ARGUMENT), HttpStatus.INTERNAL_SERVER_ERROR);
+                Api.fail(CommonErrorType.ILLEGAL_ARGUMENT, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Api<?>> handleMethodArgumentNotValidException(
             final MethodArgumentNotValidException exception) {
         return new ResponseEntity<>(
-                Api.fail(CommonErrorType.REQUEST_VALIDATION), HttpStatus.BAD_REQUEST);
+                Api.fail(CommonErrorType.REQUEST_VALIDATION, HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Api<?>> exception(final Exception exception) {
         log.error("{}", exception);
         return new ResponseEntity<>(
-                Api.fail(CommonErrorType.INTERNAL_SERVER), HttpStatus.INTERNAL_SERVER_ERROR);
+                Api.fail(CommonErrorType.INTERNAL_SERVER, HttpStatus.INTERNAL_SERVER_ERROR), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
