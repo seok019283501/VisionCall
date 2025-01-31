@@ -64,10 +64,11 @@ public class FriendRepositoryImpl implements FriendRepository {
                                 FriendInfoDto.class,
                                 friendEntity.id, // friendId
                                 friendEntity.fromMemberId
-                                        .when(memberId).then(friendEntity.toMemberId) // b가 from이면 to를 가져옴
-                                        .otherwise(friendEntity.fromMemberId),       // b가 to이면 from을 가져옴
+                                        .when(memberId).then(friendEntity.toMemberId) // 현재 사용자가 from이면 to를 가져옴
+                                        .otherwise(friendEntity.fromMemberId),       // 현재 사용자가 to이면 from을 가져옴
                                 memberEntity.nickname,                          // 해당 memberId의 nickname 가져오기
-                                friendEntity.status                             // friendStatus 추가
+                                friendEntity.status,                            // friendStatus 추가
+                                friendEntity.toMemberId.eq(memberId) // 요청한 사람이 toMemberId이면 true
                         )
                 )
                 .from(friendEntity)
@@ -90,5 +91,6 @@ public class FriendRepositoryImpl implements FriendRepository {
                         friendEntity.id.asc()       // 같은 상태에서는 friendId 기준 정렬
                 )
                 .fetch();
+
     }
 }
