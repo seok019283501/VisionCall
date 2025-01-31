@@ -2,7 +2,8 @@ package org.signaling.signaling_server.common.type.success;
 
 public enum CallRoomSuccessType implements SuccessTypeCode{
     CREATE_CALL_ROOM(200,"OK","통화방 생성에 성공하였습니다."),
-    SEARCH_CALL_ROOM(200,"OK","통화방 목록 조회에 성공하였습니다.")
+    SEARCH_CALL_ROOM(200,"OK","통화방 목록 조회에 성공하였습니다."),
+    CHANGE_CALL_ROOM_NAME(200,"OK","통화방 이름 변경에 성공하였습니다.")
     ;
 
     private final Integer code;

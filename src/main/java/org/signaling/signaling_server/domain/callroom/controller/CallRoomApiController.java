@@ -1,8 +1,10 @@
 package org.signaling.signaling_server.domain.callroom.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.signaling.signaling_server.common.api.Api;
 import org.signaling.signaling_server.common.type.success.CallRoomSuccessType;
+import org.signaling.signaling_server.domain.callroom.dto.request.ChangeRoomNameRequest;
 import org.signaling.signaling_server.domain.callroom.dto.response.CallRoomInfoListResponse;
 import org.signaling.signaling_server.domain.callroom.service.CallRoomService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -31,6 +33,17 @@ public class CallRoomApiController implements CallRoomApi {
     ) {
         CallRoomInfoListResponse callRoomInfoListResponse = callRoomService.searchRoom(search, authentication);
         return Api.success(CallRoomSuccessType.SEARCH_CALL_ROOM, callRoomInfoListResponse);
+    }
+
+    @Override
+    @PatchMapping
+    public Api<?> patchRoomName(
+            @Valid
+            @RequestBody ChangeRoomNameRequest changeRoomNameRequest,
+            Authentication authentication
+    ) {
+        callRoomService.patchRoomName(changeRoomNameRequest, authentication);
+        return Api.success(CallRoomSuccessType.CHANGE_CALL_ROOM_NAME);
     }
 
     @MessageMapping("/notice/{roomNumber}")
