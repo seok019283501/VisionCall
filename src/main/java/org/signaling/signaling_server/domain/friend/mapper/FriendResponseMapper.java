@@ -31,6 +31,7 @@ public class FriendResponseMapper {
                 .memberId(friendInfoDto.memberId())
                 .nickname(friendInfoDto.nickname())
                 .friendStatus(friendInfoDto.friendStatus())
+                .request(friendInfoDto.request())
                 .build();
     }
 

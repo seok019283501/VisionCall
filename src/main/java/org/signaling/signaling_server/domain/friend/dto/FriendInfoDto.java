@@ -7,7 +7,8 @@ public record FriendInfoDto(
         Long friendId,
         Long memberId,
         String nickname,
-        FriendStatus friendStatus
+        FriendStatus friendStatus,
+        boolean request
 ) {
 
 }
