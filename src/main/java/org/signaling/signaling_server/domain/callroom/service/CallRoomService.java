@@ -2,6 +2,10 @@ package org.signaling.signaling_server.domain.callroom.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.signaling.signaling_server.common.exception.BadRequestException;
+import org.signaling.signaling_server.common.exception.NotFoundException;
+import org.signaling.signaling_server.common.type.error.CallRoomMemberErrorType;
+import org.signaling.signaling_server.domain.callroom.dto.request.ChangeRoomNameRequest;
 import org.signaling.signaling_server.domain.callroom.dto.response.CallRoomInfoListResponse;
 import org.signaling.signaling_server.domain.callroom.dto.response.CallRoomInfoResponse;
 import org.signaling.signaling_server.domain.callroom.mapper.CallRoomEntityMapper;
@@ -50,5 +54,14 @@ public class CallRoomService {
         ).toList();
 
         return CallRoomResponseMapper.toCallRoomInfoListResponse(callRoomInfoResponseList);
+    }
+
+    @Transactional
+    public void patchRoomName(ChangeRoomNameRequest changeRoomNameRequest, Authentication authentication) {
+        CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+        if(!callRoomMemberRepository.existsByCallRoomIdAndMemberId(changeRoomNameRequest.callRoomId(), userDetails.getId())){
+            throw new NotFoundException(CallRoomMemberErrorType.NOT_FOUND);
+        }
+        callRoomRepository.updateRoomNameById(changeRoomNameRequest.callRoomId(), changeRoomNameRequest.roomName());
     }
 }

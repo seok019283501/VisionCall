@@ -1,5 +1,6 @@
 package org.signaling.signaling_server.domain.callroom.repository;
 
+
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import static org.signaling.signaling_server.entity.callroom.QCallRoomEntity.callRoomEntity;
 import static org.signaling.signaling_server.entity.callroommember.QCallRoomMemberEntity.callRoomMemberEntity;
+import static org.signaling.signaling_server.entity.friend.QFriendEntity.friendEntity;
 import static org.signaling.signaling_server.entity.member.QMemberEntity.memberEntity;
 
 @Repository
@@ -62,5 +64,13 @@ public class CallRoomRepositoryImpl implements CallRoomRepository{
                                 )
                 )
                 .fetch();
+    }
+
+    @Override
+    public void updateRoomNameById(Long callRoomId, String callRoomName) {
+        jpaQueryFactory.update(callRoomEntity)
+                .set(callRoomEntity.roomName, callRoomName)
+                .where(callRoomEntity.id.eq(callRoomId))
+                .execute();
     }
 }

@@ -15,4 +15,6 @@ public interface CallRoomRepository {
     boolean existsById(Long id);
 
     List<CallRoomEntity> findBySearchAndMemberId(String search, Long memberId);
+
+    void updateRoomNameById(Long callRoomId, String callRoomName);
 }
