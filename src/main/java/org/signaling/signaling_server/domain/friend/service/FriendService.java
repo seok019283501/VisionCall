@@ -4,7 +4,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.signaling.signaling_server.common.exception.BadRequestException;
+import org.signaling.signaling_server.common.exception.NotFoundException;
 import org.signaling.signaling_server.common.type.error.FriendErrorType;
+import org.signaling.signaling_server.common.type.error.MemberErrorType;
 import org.signaling.signaling_server.domain.friend.dto.FriendInfoDto;
 import org.signaling.signaling_server.domain.friend.dto.request.FriendIdRequest;
 import org.signaling.signaling_server.domain.friend.dto.request.AddFriendRequest;
@@ -14,8 +16,10 @@ import org.signaling.signaling_server.domain.friend.mapper.FriendEntityMapper;
 import org.signaling.signaling_server.domain.friend.mapper.FriendResponseMapper;
 import org.signaling.signaling_server.domain.friend.repository.FriendRepository;
 import org.signaling.signaling_server.domain.member.dto.CustomUserDetail;
+import org.signaling.signaling_server.domain.member.repository.MemberRepository;
 import org.signaling.signaling_server.entity.friend.FriendEntity;
 import org.signaling.signaling_server.entity.friend.enums.FriendStatus;
+import org.signaling.signaling_server.entity.member.MemberEntity;
 import org.signaling.signaling_server.kafka.KafkaProducerService;
 import org.signaling.signaling_server.kafka.dto.FriendNotification;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
@@ -31,10 +35,14 @@ import java.util.stream.Collectors;
 public class FriendService {
     private final FriendRepository friendRepository;
     private final KafkaProducerService kafkaProducerService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void addFriend(AddFriendRequest addFriendRequest, Authentication authentication) {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
+
+        MemberEntity friend = memberRepository.findByEmail(addFriendRequest.email())
+                .orElseThrow(()->new NotFoundException(MemberErrorType.NOT_FOUND));
 
         /**TODO 1. email 친구 추가로 변경
          * 2. 자기 자신 친구 추가 불가
@@ -42,16 +50,16 @@ public class FriendService {
 
         // 친구추가 요청 유무 확인
         if (friendRepository.existsByFromMemberIdAndToMemberIdAndStatus(
-                userDetails.getId(), addFriendRequest.toMemberId(), FriendStatus.REQUEST)) {
+                userDetails.getId(), friend.getId(), FriendStatus.REQUEST)) {
             throw new BadRequestException(FriendErrorType.FRIEND_REQUEST);
         }
 
-        FriendEntity friendEntity = FriendEntityMapper.toEntity(addFriendRequest, userDetails.getId());
+        FriendEntity friendEntity = FriendEntityMapper.toEntity(friend, userDetails.getId());
         friendRepository.save(friendEntity);
 
         // 알림 생성
         FriendNotification notification = FriendResponseMapper.toFriendNotification(
-                addFriendRequest, userDetails.getMemberEntity(), FriendStatus.REQUEST,
+                friend, userDetails.getMemberEntity(), FriendStatus.REQUEST,
                 userDetails.getMemberEntity().getNickname() + "님이 친구요청을 하였습니다."
         );
 
@@ -75,10 +83,10 @@ public class FriendService {
 
     //친구 삭제
     @Transactional
-    public void deleteFriend(FriendIdRequest friendIdRequest, Authentication authentication) {
+    public void deleteFriend(Long friendId, Authentication authentication) {
         CustomUserDetail userDetails = (CustomUserDetail) authentication.getPrincipal();
 
-        friendRepository.deleteByIdAndFromMemberOrToMember(friendIdRequest.friendId(),userDetails.getId());
+        friendRepository.deleteByIdAndFromMemberOrToMember(friendId,userDetails.getId());
     }
 
     //친구 검색

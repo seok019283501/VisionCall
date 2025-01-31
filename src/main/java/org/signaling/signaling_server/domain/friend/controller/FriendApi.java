@@ -17,7 +17,7 @@ public interface FriendApi {
     Api<?> acceptFriend(FriendIdRequest friendIdRequest, Authentication authentication);
 
     @Operation(summary = "친구삭제를 합니다.", description = "담당자: 최민석")
-    Api<?> deleteFriend(FriendIdRequest friendIdRequest, Authentication authentication);
+    Api<?> deleteFriend(Long friendId, Authentication authentication);
 
     @Operation(summary = "친구를 검색합니다.", description = "담당자: 최민석")
     Api<FriendInfoListResponse> searchToFriend(String nickname, Authentication authentication);
