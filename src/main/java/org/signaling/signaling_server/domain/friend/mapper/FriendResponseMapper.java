@@ -14,12 +14,12 @@ import java.util.List;
 
 public class FriendResponseMapper {
 
-    public static FriendNotification toFriendNotification(AddFriendRequest friendRequest, MemberEntity memberEntity, FriendStatus status, String message){
+    public static FriendNotification toFriendNotification(MemberEntity friendMemberEntity, MemberEntity memberEntity, FriendStatus status, String message){
         return FriendNotification.builder()
                 .fromMemberId(memberEntity.getId())
                 .username(memberEntity.getUsername())
                 .nickname(memberEntity.getNickname())
-                .toMemberId(friendRequest.toMemberId())
+                .toMemberId(friendMemberEntity.getId())
                 .status(status)
                 .message(message)
                 .build();

@@ -39,13 +39,13 @@ public class FriendApiController implements FriendApi {
         return Api.success(FriendSuccessType.ACCEPT_ADD_FRIEND);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{friendId}")
     public Api<?> deleteFriend(
             @Valid
-            @RequestBody FriendIdRequest friendIdRequest,
+            @PathVariable(name = "friendId") Long friendId,
             Authentication authentication
     ) {
-        friendService.deleteFriend(friendIdRequest, authentication);
+        friendService.deleteFriend(friendId, authentication);
         return Api.success(FriendSuccessType.DELETE_FRIEND);
     }
 
